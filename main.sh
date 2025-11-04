@@ -2,7 +2,8 @@
 
 #####################################
 # learning simple scripting without
-# in bash to master the shell
+# external tools in bash 
+# to master the shell
 #####################################
 set -euo pipefail
 
