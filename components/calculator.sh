@@ -66,7 +66,7 @@ calculator() {
     echo ""
   else
     echo ""
-    header "not a valid operation"
+    error "not a valid operation"
     echo ""
   fi
 }
