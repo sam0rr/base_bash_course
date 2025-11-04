@@ -4,15 +4,15 @@
 SCORE_DIR="./components/storage"
 TOP_SCORE_FILE="${SCORE_DIR}/guest_number_top.txt"
 if [[ -f "${TOP_SCORE_FILE}" ]]; then
-  while IFS='=' read -r key value; do
-    [[ "${key}" == "[TOP_SCORE]" ]] && TOP_SCORE="${value}"
-  done < "${TOP_SCORE_FILE}"
-else  
-  if ! [[ -d "${SCORE_DIR}" ]]; then
-  	mkdir "${SCORE_DIR}" || true
-  fi
-  touch "${TOP_SCORE_FILE}"
-  TOP_SCORE=0
+	while IFS='=' read -r key value; do
+		[[ "${key}" == "[TOP_SCORE]" ]] && TOP_SCORE="${value}"
+	done <"${TOP_SCORE_FILE}"
+else
+	if ! [[ -d "${SCORE_DIR}" ]]; then
+		mkdir "${SCORE_DIR}" || true
+	fi
+	touch "${TOP_SCORE_FILE}"
+	TOP_SCORE=0
 fi
 HISTORY_SCORE_FILE="${SCORE_DIR}/guest_number_history.txt}"
 
@@ -77,56 +77,56 @@ clues() {
 }
 
 calculate_score() {
-  local attempts_ref="${1}"
-  local -n score_ref="${2}"
-  local step
+	local attempts_ref="${1}"
+	local -n score_ref="${2}"
+	local step
 
-  if ((attempts_ref <= 10)); then
-    step=$((10 - attempts_ref))
-    score_ref=$((step * 15))
-  elif ((attempts_ref <= 20)); then
-    step=$((20 - attempts_ref))
-    score_ref=$((step * 10))
-  elif ((attempts_ref <= 30)); then
-    step=$((30 - attempts_ref))
-    score_ref=$((step * 5))
-  elif ((attempts_ref <= 40)); then
-    step=$((40 - attempts_ref))
-    score_ref=$((step * 2))
-  else
-    score_ref=0
-  fi
+	if ((attempts_ref <= 10)); then
+		step=$((10 - attempts_ref))
+		score_ref=$((step * 15))
+	elif ((attempts_ref <= 20)); then
+		step=$((20 - attempts_ref))
+		score_ref=$((step * 10))
+	elif ((attempts_ref <= 30)); then
+		step=$((30 - attempts_ref))
+		score_ref=$((step * 5))
+	elif ((attempts_ref <= 40)); then
+		step=$((40 - attempts_ref))
+		score_ref=$((step * 2))
+	else
+		score_ref=0
+	fi
 
-  echo ""
-  echo "your score is : ${score_ref}"
-  echo
+	echo ""
+	echo "your score is : ${score_ref}"
+	echo
 }
 
 history_score_util() {
-  local attempts_ref="${1}"
-  local score_ref="${2}"
-  when="$(date '+%Y-%m-%d %H:%M:%S')"
-  
-  if ! [[ -d "${SCORE_DIR}" ]]; then
-  	mkdir "${SCORE_DIR}" || true
-  fi
+	local attempts_ref="${1}"
+	local score_ref="${2}"
+	when="$(date '+%Y-%m-%d %H:%M:%S')"
 
-  if ! [[ -f "${HISTORY_SCORE_FILE}" ]]; then
-  	touch "${HISTORY_SCORE_FILE}" || true
-  fi
+	if ! [[ -d "${SCORE_DIR}" ]]; then
+		mkdir "${SCORE_DIR}" || true
+	fi
 
-  echo "${when} ; attempts : ${attempts_ref} ; score : ${score_ref}" >> "${HISTORY_SCORE_FILE}"
+	if ! [[ -f "${HISTORY_SCORE_FILE}" ]]; then
+		touch "${HISTORY_SCORE_FILE}" || true
+	fi
+
+	echo "${when} ; attempts : ${attempts_ref} ; score : ${score_ref}" >>"${HISTORY_SCORE_FILE}"
 }
 
 top_score_util() {
-  local -n score_ref="${1}"
+	local -n score_ref="${1}"
 
-  if ((score_ref > TOP_SCORE)); then
-    echo "[TOP_SCORE]=${score_ref}" >"${TOP_SCORE_FILE}"
-    TOP_SCORE="${score_ref}"
-    echo ""
-    echo "new top score ${score_ref}"
-  fi
+	if ((score_ref > TOP_SCORE)); then
+		echo "[TOP_SCORE]=${score_ref}" >"${TOP_SCORE_FILE}"
+		TOP_SCORE="${score_ref}"
+		echo ""
+		echo "new top score ${score_ref}"
+	fi
 }
 
 game_loop() {
@@ -135,16 +135,16 @@ game_loop() {
 	local attempts=0
 
 	while true; do
-	  echo ""
-	  echo "##################################"
+		echo ""
+		echo "##################################"
 		echo "number of attempts : ${attempts}"
 		echo "Current Top Score : ${TOP_SCORE}"
-	  echo "##################################"
-	  echo ""
+		echo "##################################"
+		echo ""
 
 		if ((attempts >= 41)); then
-		  error "too much attempts, you loose"
-		  break
+			error "too much attempts, you loose"
+			break
 		fi
 
 		read -rp "guest a number between 0 and 100: " input
@@ -155,14 +155,14 @@ game_loop() {
 		fi
 
 		if (("${input}" == "${random}")); then
-		  local score
-		  echo ""
+			local score
+			echo ""
 			echo "you won"
 			echo ""
 			((attempts++))
 
-      calculate_score "${attempts}" score
-      history_score_util "${attempts}" "${score}"
+			calculate_score "${attempts}" score
+			history_score_util "${attempts}" "${score}"
 			top_score_util score
 			break
 		fi

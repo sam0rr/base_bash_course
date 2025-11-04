@@ -11,15 +11,15 @@ readonly UTILS="${COMPONENTS_DIR}/utils.sh"
 readonly STORAGE_DIR="${COMPONENTS_DIR}/storage"
 readonly EDITOR_FILE="${STORAGE_DIR}/editor.txt"
 if [[ -f "${EDITOR_FILE}" ]]; then
-  while IFS='=' read -r key value; do
-    [[ "${key}" == "[EDITOR]" ]] && EDITOR="${value}"
-  done < "${EDITOR_FILE}"
-else  
-  if ! [[ -d "${STORAGE_DIR}" ]]; then
-  	mkdir "${STORAGE_DIR}" || true
-  fi
-  touch "${EDITOR_FILE}"
-  EDITOR="nano"
+	while IFS='=' read -r key value; do
+		[[ "${key}" == "[EDITOR]" ]] && EDITOR="${value}"
+	done <"${EDITOR_FILE}"
+else
+	if ! [[ -d "${STORAGE_DIR}" ]]; then
+		mkdir "${STORAGE_DIR}" || true
+	fi
+	touch "${EDITOR_FILE}"
+	EDITOR="nano"
 fi
 
 # source
@@ -53,64 +53,64 @@ edit_menu() {
 }
 
 choose_editor() {
-  local editor
+	local editor
 
-  header "Current Editor: ${EDITOR}"
-  read -rp "enter the command to open your editor of choice : " editor
+	header "Current Editor: ${EDITOR}"
+	read -rp "enter the command to open your editor of choice : " editor
 
-  editor="${editor,,}"
-  
-  if ! command -v "${editor}" >/dev/null; then
-    error "the editor ${editor} is not valid"
-    debug "fallback to ${EDITOR} as the default"
-  else
-    echo "[EDITOR]=${editor}" > "${EDITOR_FILE}"
-    EDITOR="${editor}"
-    echo ""
-    echo "new editor set : ${editor}" 
-  fi
+	editor="${editor,,}"
+
+	if ! command -v "${editor}" >/dev/null; then
+		error "the editor ${editor} is not valid"
+		debug "fallback to ${EDITOR} as the default"
+	else
+		echo "[EDITOR]=${editor}" >"${EDITOR_FILE}"
+		EDITOR="${editor}"
+		echo ""
+		echo "new editor set : ${editor}"
+	fi
 }
 
 edit_mode() {
-  local option
-  	while true; do
-  		edit_menu  
-  		read -rp "choose the script to run: " option
-  
-  		case "${option}" in
-  		"0")
-  		  break
-  		  ;;
+	local option
+	while true; do
+		edit_menu
+		read -rp "choose the script to run: " option
 
-		  "1")
-  		  choose_editor
-  		  ;;
+		case "${option}" in
+		"0")
+			break
+			;;
 
-  		"2")
-  		  "${EDITOR}" ./main.sh
-  		  ;;
-  		  
-  		"3")
-  			"${EDITOR}" "${COMPONENTS_DIR}"/bob_dole.sh
-  			;;
-  
-  		"4")
-  			"${EDITOR}" "${COMPONENTS_DIR}"/reference_proof.sh
-  			;;
-  
-  		"5")
-  			"${EDITOR}" "${COMPONENTS_DIR}"/calculator.sh
-  			;;
-  
-  		"6")
-  			"${EDITOR}" "${COMPONENTS_DIR}"/guest_number.sh
-  			;;
-  
-  		*)
-  			error "choice is not in the list"
-  			;;
-  		esac
-  	done
+		"1")
+			choose_editor
+			;;
+
+		"2")
+			"${EDITOR}" ./main.sh
+			;;
+
+		"3")
+			"${EDITOR}" "${COMPONENTS_DIR}"/bob_dole.sh
+			;;
+
+		"4")
+			"${EDITOR}" "${COMPONENTS_DIR}"/reference_proof.sh
+			;;
+
+		"5")
+			"${EDITOR}" "${COMPONENTS_DIR}"/calculator.sh
+			;;
+
+		"6")
+			"${EDITOR}" "${COMPONENTS_DIR}"/guest_number.sh
+			;;
+
+		*)
+			error "choice is not in the list"
+			;;
+		esac
+	done
 }
 
 main() {
@@ -120,7 +120,7 @@ main() {
 
 	while true; do
 		menu
-    
+
 		read -rp "choose the script to run: " option
 
 		case "${option}" in
@@ -128,7 +128,7 @@ main() {
 			header "thanks for learning bash with me"
 			exit 0
 			;;
-			
+
 		"1")
 			edit_mode
 			;;
