@@ -14,7 +14,7 @@ else
 	touch "${TOP_SCORE_FILE}"
 	TOP_SCORE=0
 fi
-HISTORY_SCORE_FILE="${SCORE_DIR}/guest_number_history.txt}"
+HISTORY_SCORE_FILE="${SCORE_DIR}/guest_number_history.txt"
 
 # Sourcing
 . ./components/utils.sh
