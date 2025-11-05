@@ -53,6 +53,19 @@ edit_menu() {
 	echo ""
 }
 
+validate_editor() {
+  local editor_ref="${1}"
+  declare -r valid_editors=("nano", "micro", "vim", "nvim", "vi", "gedit", "code")
+
+  for valid_editor in "${valid_editors[@]}"; do
+      if [[ "${editor_ref}" == "${valid_editor}" ]]; then
+        return 1
+      fi
+  done
+
+  return 0
+}
+
 choose_editor() {
 	local editor
 
@@ -65,10 +78,16 @@ choose_editor() {
 		error "the editor ${editor} is not valid"
 		debug "fallback to ${EDITOR} as the default"
 	else
-		echo "[EDITOR]=${editor}" >"${EDITOR_FILE}"
-		EDITOR="${editor}"
-		echo ""
-		echo "new editor set : ${editor}"
+	  if ! validate_editor "${editor}"; then
+  		echo "[EDITOR]=${editor}" >"${EDITOR_FILE}"
+  		EDITOR="${editor}"
+  		echo ""
+  		echo "new editor set : ${editor}"
+  	else
+  	  echo ""
+  	  error "not a valid text editor"
+  	  echo ""
+  	fi
 	fi
 }
 
